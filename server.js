@@ -6,7 +6,7 @@ app.use(express.json()); // to parse request into json
 const database = {
   users: [
     {
-      id: 123,
+      id: "123",
       name: "John",
       email: "john@gmail.com",
       password: "cookies",
@@ -14,7 +14,7 @@ const database = {
       joined: new Date(),
     },
     {
-      id: 124,
+      id: "124",
       name: "Sally",
       email: "sally@gmail.com",
       password: "bananas",
@@ -45,7 +45,7 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   database.users.push({
-    id: 125,
+    id: "125",
     name: name,
     email: email,
     password: password,
@@ -54,6 +54,24 @@ app.post("/register", (req, res) => {
   });
 
   res.json(database.users[database.users.length - 1]);
+});
+
+app.get("/profile/:id", (req, res) => {
+  console.log("app profile");
+  const { id } = req.params;
+  let found = false;
+
+  database.users.forEach((user) => {
+    console.log("checking/requested userId", user.id, id);
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
+    }
+  });
+  console.log("found", found);
+  if (!found) {
+    res.status(400).json("user not found");
+  }
 });
 
 app.listen(3000, () => {
