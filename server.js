@@ -74,19 +74,23 @@ app.get("/profile/:id", (req, res) => {
   }
 });
 
+app.put("/image", (req, res) => {
+  const { id } = req.body;
+  let found = false;
+
+  database.users.forEach((user) => {
+    console.log("checking/requested userId", user.id, id);
+    if (user.id === id) {
+      found = true;
+      user.entries++;
+      return res.json(user.entries);
+    }
+  });
+  if (!found) {
+    res.status(400).json("user not found");
+  }
+});
+
 app.listen(3000, () => {
   console.log("app is running on port 3000");
 });
-
-/*
-API structure:
-/ --> res = this is working
-
-signin is not PUT(update) because each time, user info should be secure with HTTP encoding
-/signin ==> POST = signin success/fail
-/register --> POST = user
-
-each user has rank
-/profile/:userId --> GET = user
-/image --> PUT = user
-*/
