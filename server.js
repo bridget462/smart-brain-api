@@ -1,25 +1,36 @@
 const express = require("express");
+const bcrypt = require("bcrypt-nodejs");
+const cors = require("cors");
 
 const app = express();
+
 app.use(express.json()); // to parse request into json
+app.use(cors());
 
 const database = {
   users: [
     {
       id: "123",
       name: "John",
-      email: "john@gmail.com",
       password: "cookies",
+      email: "john@gmail.com",
       entries: 0,
       joined: new Date(),
     },
     {
       id: "124",
       name: "Sally",
-      email: "sally@gmail.com",
       password: "bananas",
+      email: "sally@gmail.com",
       entries: 0,
       joined: new Date(),
+    },
+  ],
+  login: [
+    {
+      id: "987",
+      has: "",
+      email: "john@gmail.com",
     },
   ],
 };
@@ -29,6 +40,22 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  // Load hash from your password DB.
+  bcrypt.compare(
+    "bike",
+    "$2a$10$J1XAHTL4TgG/GDRPCvJxleS4MJQA1mcj6kpaXYY1HMo2NTWgJy952",
+    function (err, res) {
+      console.log("first guess", res);
+    }
+  );
+  bcrypt.compare(
+    "veggies",
+    "$2a$10$J1XAHTL4TgG/GDRPCvJxleS4MJQA1mcj6kpaXYY1HMo2NTWgJy952",
+    function (err, res) {
+      console.log("second guess", res);
+    }
+  );
+
   // TODO check every user
   if (
     req.body.email === database.users[0].email &&
@@ -44,6 +71,7 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
+
   database.users.push({
     id: "125",
     name: name,
@@ -90,6 +118,8 @@ app.put("/image", (req, res) => {
     res.status(400).json("user not found");
   }
 });
+
+// bcrypt-nodejs docs: https://www.npmjs.com/package/bcrypt-nodejs
 
 app.listen(3000, () => {
   console.log("app is running on port 3000");
