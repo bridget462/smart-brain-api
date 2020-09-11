@@ -65,8 +65,6 @@ app.post("/signin", (req, res) => {
   } else {
     res.status(400).json("error logging in");
   }
-
-  res.json("signin");
 });
 
 app.post("/register", (req, res) => {
@@ -102,11 +100,11 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.put("/image", (req, res) => {
+  console.log("server, /image called");
   const { id } = req.body;
   let found = false;
 
   database.users.forEach((user) => {
-    console.log("checking/requested userId", user.id, id);
     if (user.id === id) {
       found = true;
       user.entries++;
