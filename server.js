@@ -88,14 +88,16 @@ app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
 
   db("users")
+    .returning("*")
     .insert({
       email: email,
       name: name,
       joined: new Date(),
     })
-    .then(console.log);
-
-  res.json(database.users[database.users.length - 1]);
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => res.status(400).json("unable to register"));
 });
 
 app.get("/profile/:id", (req, res) => {
