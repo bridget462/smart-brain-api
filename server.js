@@ -46,6 +46,10 @@ app.put("/image", (req, res) => {
   image.handleImage(req, res, db);
 });
 
+app.post("/imageurl", (req, res) => {
+  image.handleApiCall(req, res);
+});
+
 // bcrypt-nodejs docs: https://www.npmjs.com/package/bcrypt-nodejs
 app.listen(3000, () => {
   console.log("app is running on port 3000");
